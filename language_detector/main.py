@@ -11,32 +11,13 @@ def detect_language(text, languages):
             word_count[word] = 1
         else:
             word_count[word] +=1
-
-    spanish_score = 0
-    for lang in languages:
-        if lang['name'] == 'Spanish':
-            for word in lang['common_words']:
-                if word in word_count:
-                    spanish_score += word_count[word]
-
-    german_score = 0
-    for lang in languages:
-        if lang['name'] == 'German':
-            for word in lang['common_words']:
-                if word in word_count:
-                    german_score += word_count[word]
-                    
-    english_score = 0
-    for lang in languages:
-        if lang['name'] == 'English':
-            for word in lang['common_words']:
-                if word in word_count:
-                    english_score += word_count[word]
-
-    if spanish_score > german_score and spanish_score > english_score:
-        return 'Spanish'
-    elif german_score > spanish_score and german_score > english_score:
-        return 'German'
-    else:
-        return 'English'
     
+    score_list = []
+    for lang in languages:
+        score = 0
+        for word in lang['common_words']:
+            if word in word_count:
+                score += word_count[word]
+        score_list.append((score, lang['name']))
+    
+    return sorted(score_list, reverse=True)[0][1]
